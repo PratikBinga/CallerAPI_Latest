@@ -79,6 +79,23 @@ namespace DocSignCallingAPI.Controllers
 
             return View();
         }
+        
+        [HttpGet]
+        public ContentResult GetDocumentStatus(string EnvelopeId)
+        {
+            string resultMessage = "";
+            using (var client = new HttpClient())
+            {
+                //var res = await client.PostAsync("https://localhost:44349/api/DocuSignPost/GetDocumentStatus", new StringContent(JsonConvert.SerializeObject(inputModel), Encoding.UTF8, "application/json"));
+                //HttpResponseMessage res = client.GetAsync("https://dssapi.azurewebsites.net/api/DocuSignPost/GetDocumentStatus", new StringContent(JsonConvert.SerializeObject(inputModel), Encoding.UTF8, "application/json")).Result;
+
+                HttpResponseMessage res = client.GetAsync("https://localhost:44349/api/DocuSignPost/GetDocumentStatus?EnvelopeId=" + EnvelopeId).Result;
+                Task<string> responseesult = res.Content.ReadAsStringAsync();
+                ViewBag.SucMessage = responseesult.Result.ToString();
+                resultMessage = responseesult.Result.ToString();
+            }
+            return Content(resultMessage);
+        }
 
     }
 }
